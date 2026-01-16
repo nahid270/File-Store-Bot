@@ -1,11 +1,8 @@
-# Don't Remove Credit Tg - @VJ_Bots
-# Subscribe YouTube Channel For Amazing Bot @Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+# handlers/database.py
 
 import datetime
 import motor.motor_asyncio
 from configs import Config
-
 
 class Database:
 
@@ -13,6 +10,46 @@ class Database:
         self._client = motor.motor_asyncio.AsyncIOMotorClient(uri)
         self.db = self._client[database_name]
         self.col = self.db.users
+        self.config_col = self.db.config
+
+    # -------- নতুন ফাংশন শুরু (ক্যাপশন ও সেটিংস) --------
+    
+    async def get_protect_content(self):
+        config = await self.config_col.find_one({'id': 'bot_settings'})
+        return config.get('protect_content', False) if config else False
+
+    async def set_protect_content(self, value: bool):
+        await self.config_col.update_one(
+            {'id': 'bot_settings'}, 
+            {'$set': {'protect_content': value}}, 
+            upsert=True
+        )
+
+    async def get_auto_delete_time(self):
+        config = await self.config_col.find_one({'id': 'bot_settings'})
+        return config.get('auto_delete_time', 0) if config else 0
+
+    async def set_auto_delete_time(self, time_in_seconds: int):
+        await self.config_col.update_one(
+            {'id': 'bot_settings'},
+            {'$set': {'auto_delete_time': time_in_seconds}},
+            upsert=True
+        )
+
+    # কাস্টম ক্যাপশন সেট করা
+    async def set_caption(self, caption):
+        await self.config_col.update_one(
+            {'id': 'bot_settings'},
+            {'$set': {'caption': caption}},
+            upsert=True
+        )
+
+    # কাস্টম ক্যাপশন আনা
+    async def get_caption(self):
+        config = await self.config_col.find_one({'id': 'bot_settings'})
+        return config.get('caption', None) if config else None
+
+    # -------- নতুন ফাংশন শেষ --------
 
     def new_user(self, id):
         return dict(
@@ -76,6 +113,5 @@ class Database:
     async def get_all_banned_users(self):
         banned_users = self.col.find({'ban_status.is_banned': True})
         return banned_users
-
 
 db = Database(Config.DATABASE_URL, Config.BOT_USERNAME)
