@@ -7,8 +7,8 @@ import os
 class Config(object):
   API_ID = int(os.environ.get("API_ID", "29462738"))
   API_HASH = os.environ.get("API_HASH", "297f51aaab99720a09e80273628c3c24")
-  BOT_TOKEN = os.environ.get("BOT_TOKEN", "8208103046:AAFEFNHzy9RkqGpLCCrVv3Z_CJ7wklTFwZQ")
-  BOT_USERNAME = os.environ.get("BOT_USERNAME", "HDFileStoreBot")
+  BOT_TOKEN = os.environ.get("BOT_TOKEN", "8787371353:AAFKLH3foz_PRQFn51bNk5oUd5mR5PBzj_k")
+  BOT_USERNAME = os.environ.get("BOT_USERNAME", "HDFile2StoreBot")
   DB_CHANNEL = int(os.environ.get("DB_CHANNEL", "-1003364382430"))
   SHORTLINK_URL = os.environ.get('SHORTLINK_URL', "teraboxlinks.com")
   SHORTLINK_API = os.environ.get('SHORTLINK_API', "8490815a50aacac0e54269449473c73d4700e532")
